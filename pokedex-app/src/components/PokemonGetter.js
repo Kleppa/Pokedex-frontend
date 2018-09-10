@@ -2,17 +2,16 @@ import React, {Component} from 'react';
 import * as httpWorker from '../utils/RestApiWorker.js'
 import {Observable, Observer} from 'rxjs'
 import {Pokemon} from "./Pokemon";
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import {fetchPokemonFullfilled} from "../redux/action/GetEndpoint";
 
 
-
-export default class PokemonGetter extends Component {
+class PokemonGetter extends Component {
     state = {};
 
     componentDidMount() {
-        let subscription = httpWorker.httpGetUrl('http://localhost:8080/').subscribe({
-            next: pokemonData => this.setState({pokemonData}),
-            complete: pokemonData => console.log('[complete]'),
-        });
+
     }
     pokemonList = (data) => {
         const listElementsOfPokemonComponents = data.map((pokemon) => {
@@ -33,5 +32,9 @@ export default class PokemonGetter extends Component {
             </div>
         )
     }
-
 }
+function mapStateToProps(state) {
+    return {pokemonData:state.pokedex}
+    
+}
+export default connect(mapStateToProps,{fetchPokemonFullfilled})(PokemonGetter)
